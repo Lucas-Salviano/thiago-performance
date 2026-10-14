@@ -7,14 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const navMenu = document.getElementById('nav-menu');
 
     if (menuToggle && navMenu) {
+        const setMenuOpen = (open) => {
+            navMenu.classList.toggle('active', open);
+            menuToggle.setAttribute('aria-expanded', open);
+            menuToggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+        };
+
         menuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
+            setMenuOpen(!navMenu.classList.contains('active'));
         });
 
         // Close menu when clicking links
-        document.querySelectorAll('.nav-link').forEach(link => {
+        navMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
+                setMenuOpen(false);
             });
         });
     }
@@ -35,7 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             
-            if (targetId === '#') return;
+            if (targetId === '#') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
 
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
